@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CyberBank Edu - Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="bank-container">
+        <h1 class="welcome-msg">Welcome, {{ user[1] }}!</h1>
+        
+        <div class="balance-container">
+            <div class="balance-label">Your Balance:</div>
+            <div class="balance-amount">₹{{ "%.2f"|format(user[3]) }}</div>
+        </div>
+        
+        <div class="card">
+            <h2>Transfer Money</h2>
+            <form action="/transfer" method="POST">
+                <select name="receiver_id" required>
+                    <option value="">Select Recipient</option>
+                    {% for id, username in all_users %}
+                        <option value="{{ id }}">{{ username }}</option>
+                    {% endfor %}
+                </select>
+                <input type="text" name="amount" placeholder="Amount in ₹" required>
+                <button type="submit">Transfer</button>
+            </form>
+        </div>
+        
+        <div class="card">
+            <h2>Switch User</h2>
+            <form action="/switch_user" method="POST">
+                <select name="user_id" required>
+                    <option value="">Select User</option>
+                    {% for id, username in all_users %}
+                        <option value="{{ id }}">{{ username }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit">Switch</button>
+            </form>
+        </div>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <div class="footer">
+            <a href="/logout" class="logout-btn">Logout</a>
+        </div>
+    </div>
+</body>
+</html>
